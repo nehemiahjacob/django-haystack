@@ -10,7 +10,6 @@ from django.utils import datetime_safe, six
 from haystack.exceptions import SearchFieldError
 from haystack.utils import get_model_ct_tuple
 
-
 class NOT_PROVIDED:
     pass
 
@@ -18,7 +17,6 @@ class NOT_PROVIDED:
 # are zeroed for compatibility with search backends which lack a date time distinct from datetime:
 DATE_REGEX = re.compile(r'^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})(?:|T00:00:00Z?)$')
 DATETIME_REGEX = re.compile(r'^(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})(T|\s+)(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2}).*?$')
-
 
 # All the SearchFields variants.
 
@@ -190,7 +188,6 @@ class SearchField(object):
         """
         return value
 
-
 class CharField(SearchField):
     field_type = 'string'
 
@@ -208,7 +205,6 @@ class CharField(SearchField):
             return None
 
         return six.text_type(value)
-
 
 class LocationField(SearchField):
     field_type = 'location'
@@ -247,7 +243,6 @@ class LocationField(SearchField):
         value = Point(float(lng), float(lat))
         return value
 
-
 class NgramField(CharField):
     field_type = 'ngram'
 
@@ -257,10 +252,8 @@ class NgramField(CharField):
 
         super(NgramField, self).__init__(**kwargs)
 
-
 class EdgeNgramField(NgramField):
     field_type = 'edge_ngram'
-
 
 class IntegerField(SearchField):
     field_type = 'integer'
@@ -275,7 +268,6 @@ class IntegerField(SearchField):
         return self.convert(super(IntegerField, self).prepare(obj))
 
     def convert(self, value):
-
         if not value:
             return None
 
@@ -305,7 +297,6 @@ class FloatField(SearchField):
 
         return float(value)
 
-
 class DecimalField(SearchField):
     field_type = 'string'
 
@@ -324,7 +315,6 @@ class DecimalField(SearchField):
 
         return six.text_type(value)
 
-
 class BooleanField(SearchField):
     field_type = 'boolean'
 
@@ -342,7 +332,6 @@ class BooleanField(SearchField):
             return None
 
         return bool(value)
-
 
 class DateField(SearchField):
     field_type = 'date'
@@ -371,7 +360,6 @@ class DateField(SearchField):
 
         return value
 
-
 class DateTimeField(SearchField):
     field_type = 'datetime'
 
@@ -399,7 +387,6 @@ class DateTimeField(SearchField):
 
         return value
 
-
 class MultiValueField(SearchField):
     field_type = 'string'
 
@@ -424,7 +411,6 @@ class MultiValueField(SearchField):
             return value
 
         return [value]
-
 
 class FacetField(SearchField):
     """
@@ -461,41 +447,33 @@ class FacetField(SearchField):
 
         if 'facet_for' in kwargs:
             self.facet_for = kwargs['facet_for']
-            del(kwargs['facet_for'])
+            del (kwargs['facet_for'])
 
         return kwargs
 
     def get_facet_for_name(self):
         return self.facet_for or self.instance_name
 
-
 class FacetCharField(FacetField, CharField):
     pass
-
 
 class FacetIntegerField(FacetField, IntegerField):
     pass
 
-
 class FacetFloatField(FacetField, FloatField):
     pass
-
 
 class FacetDecimalField(FacetField, DecimalField):
     pass
 
-
 class FacetBooleanField(FacetField, BooleanField):
     pass
-
 
 class FacetDateField(FacetField, DateField):
     pass
 
-
 class FacetDateTimeField(FacetField, DateTimeField):
     pass
-
 
 class FacetMultiValueField(FacetField, MultiValueField):
     pass
