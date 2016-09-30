@@ -2,14 +2,13 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import re
+from inspect import ismethod
 
-from django.template import Context, loader
+from django.template import loader
 from django.utils import datetime_safe, six
 
 from haystack.exceptions import SearchFieldError
 from haystack.utils import get_model_ct_tuple
-
-from inspect import ismethod
 
 
 class NOT_PROVIDED:
@@ -276,11 +275,17 @@ class IntegerField(SearchField):
         return self.convert(super(IntegerField, self).prepare(obj))
 
     def convert(self, value):
-        if value is None:
+
+        if not value:
             return None
 
-        return int(value)
+        if type(value) is list or type(value) is tuple:
+            value = value[0]
 
+        try:
+            return int(value)
+        except:
+            return None
 
 class FloatField(SearchField):
     field_type = 'float'
